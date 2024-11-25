@@ -6,3 +6,4 @@
                 chrome.tabs.sendMessage(tabId, { action: "fetchWebsiteData", url: tab.url });
             }
         });
+
