@@ -1,17 +1,23 @@
 from flask import Flask, request, jsonify
-import pandas as pd
 import joblib
 
 app = Flask(__name__)
 
-model = joblib.load("C:/Users/user/OneDrive/Desktop/MiniPro/Phising-Website-Detection/Model/RFC_Model.joblib")
+# Load your trained model
+model = joblib.load('model.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
-    df = pd.DataFrame([data])
-    prediction = model.predict(df)
-    return jsonify({'prediction': int(prediction[0])})
+    data = request.get_json()
+    url = data['url']
+    # Extract features from the URL
+    features = extract_features(url)
+    prediction = model.predict([features])
+    return jsonify({'phishing': bool(prediction[0])})
+
+def extract_features(url):
+    # Implement your feature extraction logic here
+    return []
 
 if __name__ == '__main__':
-         app.run(debug=True)
+    app.run(debug=True)

@@ -1,0 +1,139 @@
+Sure, here are the steps to implement your phishing website detection system in real time:
+
+### Step 1: Set Up the Flask App
+
+1. **Install Flask and other dependencies**:
+    ```bash
+    pip install Flask scikit-learn
+    ```
+
+2. **Create `app.py`**:
+    ```python
+    from flask import Flask, request, jsonify
+    import joblib
+
+    app = Flask(__name__)
+
+    # Load your trained model
+    model = joblib.load('model.pkl')
+
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        data = request.get_json()
+        url = data['url']
+        # Extract features from the URL
+        features = extract_features(url)
+        prediction = model.predict([features])
+        return jsonify({'phishing': bool(prediction[0])})
+
+    def extract_features(url):
+        # Implement your feature extraction logic here
+        return []
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+
+### Step 2: Create the Chrome Extension
+
+1. **Create `manifest.json`**:
+    ```json
+    {
+        "manifest_version": 2,
+        "name": "Phishing Website Detector",
+        "version": "1.0",
+        "permissions": ["tabs", "<all_urls>"],
+        "background": {
+            "scripts": ["background.js"],
+            "persistent": false
+        },
+        "content_scripts": [
+            {
+                "matches": ["<all_urls>"],
+                "js": ["content.js"]
+            }
+        ],
+        "browser_action": {
+            "default_popup": "popup.html"
+        }
+    }
+    ```
+
+2. **Create `background.js`**:
+    ```javascript
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+        if (changeInfo.status === 'complete' && tab.url) {
+            chrome.tabs.sendMessage(tabId, {url: tab.url});
+        }
+    });
+    ```
+
+3. **Create `content.js`**:
+    ```javascript
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        fetch('http://localhost:5000/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({url: message.url})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.phishing) {
+                alert('Warning: This site may be a phishing site!');
+            }
+        });
+    });
+    ```
+
+4. **Create `popup.html`**:
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Phishing Website Detector</title>
+    </head>
+    <body>
+        <h1>Phishing Website Detector</h1>
+        <p>Extension is running...</p>
+    </body>
+    </html>
+    ```
+
+### Step 3: Train and Save Your Machine Learning Model
+
+1. **Create `feature_extraction.py`**:
+    ```python
+    def extract_features(url):
+        # Implement your feature extraction logic here
+        return []
+
+    if __name__ == '__main__':
+        from sklearn.ensemble import RandomForestClassifier
+        import joblib
+
+        # Load your dataset
+        # X, y = ...
+
+        model = RandomForestClassifier()
+        model.fit(X, y)
+
+        joblib.dump(model, 'model.pkl')
+    ```
+
+### Step 4: Run the Flask App
+
+1. **Start the Flask app**:
+    ```bash
+    python app.py
+    ```
+
+### Step 5: Load the Chrome Extension
+
+1. **Load the extension in Chrome**:
+    - Go to `chrome://extensions/`
+    - Enable "Developer mode"
+    - Click "Load unpacked" and select the directory containing your extension files
+
+Now, your phishing website detection system should be running in real time. The Chrome extension will send the URL of the current tab to the Flask app, which will return a prediction. If the site is predicted to be a phishing site, the extension will alert the user.
