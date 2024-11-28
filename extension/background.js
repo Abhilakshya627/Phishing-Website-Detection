@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         // Handle URL change notifications
         console.log('URL changed to:', message.url);
         // Optionally, you can send this URL for prediction as well
-        fetch('https://your-phishing-detection-api.com/analyze', {
+        fetch('http://127.0.0.1:5000/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         console.log(`Tab updated: ${tabId}, URL: ${tab.url}`);
         
         // Send the URL to the phishing detection API
-        fetch('https://your-phishing-detection-api.com/analyze', {
+        fetch('http://127.0.0.1:5000/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
