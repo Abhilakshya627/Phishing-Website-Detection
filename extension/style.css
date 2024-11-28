@@ -9,7 +9,7 @@ body {
     height: 100vh;
 }
 
-div {
+.container { /* Changed from div to .container for specificity */
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;

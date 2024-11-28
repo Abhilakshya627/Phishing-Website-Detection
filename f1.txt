@@ -1,99 +1,11 @@
-Sure, here are the steps to implement your Phishing Website Detection project in order:
+// content.js - Runs in the context of the webpage
+const knownPhishingSites = ["phishingsite.com", "malicioussite.net"];
 
-1. **Set Up the Environment:**
-    - Ensure you have Python and necessary libraries installed. You can use `pip` to install required libraries:
-      ```sh
-      pip install pandas scikit-learn flask joblib
-      ```
+function checkForPhishing() {
+  const currentUrl = window.location.hostname;
+  if (knownPhishingSites.includes(currentUrl)) {
+    alert("Warning: This site is known for phishing. Proceed with caution.");
+  }
+}
 
-2. **Prepare the Dataset:**
-    - Place your dataset (`data.csv`) in the project directory.
-
-3. **Feature Extraction:**
-    - Implement feature extraction logic in `feature_extraction.py`. This script will extract features from URLs to be used for model training and prediction.
-
-4. **Train the Model:**
-    - Use the Jupyter notebook (`model.ipynb`) to train your machine learning model. This notebook includes steps to import the dataset, preprocess the data, train the model using `RandomForestClassifier`, and evaluate its accuracy.
-    - Save the trained model using `joblib`:
-      ```python
-      joblib.dump(rfc, 'model.pkl')
-      ```
-
-5. **Create the Flask API:**
-    - Implement the Flask API in `app.py` to serve the model and handle prediction requests. Ensure the feature extraction logic is correctly integrated.
-
-6. **Develop the Chrome Extension:**
-    - Implement the Chrome extension using `manifest.json`, `background.js`, `content.js`, and `popup.html`. This extension will capture the URL of the active tab and send it to the Flask API for prediction.
-
-7. **Run the Flask Server:**
-    - Start the Flask server to listen for incoming requests:
-      ```sh
-      python app.py
-      ```
-
-8. **Load the Chrome Extension:**
-    - Load the extension in Chrome by navigating to `chrome://extensions/`, enabling "Developer mode", and loading the unpacked extension from your project directory.
-
-9. **Test the Extension:**
-    - Open any website in Chrome and observe the extension's behavior. If the site is detected as phishing, an alert will be shown.
-
-10. **Refine and Deploy:**
-     - Refine your model and extension based on testing results. Deploy the Flask server on a cloud platform if needed for broader access.
-
-By following these steps, you will have a fully functional phishing website detection system using machine learning and a Chrome extension.
-
-
-If your extension is not showing any action, you can follow these steps to debug and see its behavior:
-
-1. **Check Console Logs:**
-    - Open Chrome and navigate to the Extensions page (`chrome://extensions/`).
-    - Find your extension and click on "background page" under "Inspect views".
-    - This will open the background script's console where you can see any logs or errors.
-
-2. **Verify Permissions:**
-    - Ensure that your `manifest.json` has the necessary permissions to access the active tab and make network requests. It should include:
-      ```json
-      {
-        "manifest_version": 2,
-        "name": "Phishing Detection",
-        "version": "1.0",
-        "permissions": [
-          "activeTab",
-          "tabs",
-          "http://*/",
-          "https://*/"
-        ],
-        "background": {
-          "scripts": ["background.js"],
-          "persistent": false
-        },
-        "browser_action": {
-          "default_popup": "popup.html",
-          "default_icon": {
-            "16": "images/icon16.png",
-            "48": "images/icon48.png",
-            "128": "images/icon128.png"
-          }
-        },
-        "content_scripts": [
-          {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"]
-          }
-        ]
-      }
-      ```
-
-3. **Debug Content Script:**
-    - Open the Developer Tools (F12) on any webpage and go to the "Sources" tab.
-    - Find your content script under the "Content scripts" section and add breakpoints or console logs to debug.
-
-4. **Check Network Requests:**
-    - Ensure that your extension is correctly sending requests to the Flask API.
-    - Use the "Network" tab in Developer Tools to see if the requests are being made and if there are any errors.
-
-5. **Test Popup:**
-    - Click on the extension icon in the Chrome toolbar to open the popup.
-    - Use the Developer Tools to inspect the popup and debug any issues.
-
-By following these steps, you should be able to identify and fix any issues with your Chrome extension's behavior.
+checkForPhishing();

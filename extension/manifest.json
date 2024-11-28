@@ -1,19 +1,40 @@
 {
-     "manifest_version": 2,
-     "name": "Phishing Website Detector",
-     "version": "1.0",
-     "permissions": ["tabs", "<all_urls>"],
-     "background": {
-         "scripts": ["background.js"],
-         "persistent": false
-     },
-     "content_scripts": [
-         {
-             "matches": ["<all_urls>"],
-             "js": ["content.js"]
-         }
-     ],
-     "browser_action": {
-         "default_popup": "popup.html"
-     }
- }
+    "manifest_version": 3,
+    "name": "Phishing Website Detector",
+    "version": "1.0",
+    "description": "Detects phishing websites and notifies users.",
+    "permissions": [
+        "tabs",
+        "scripting",
+        "notifications"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
+        }
+    },
+    "icons": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
+}
