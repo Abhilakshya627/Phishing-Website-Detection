@@ -86,3 +86,4 @@ def extract_features_from_url(url):
 if __name__ == "__main__":
     url = "https://www.google.com"
     df = extract_features_from_url(url)
+    print(df)

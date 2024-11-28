@@ -1,11 +1,8 @@
-// content.js - Runs in the context of the webpage
-const knownPhishingSites = ["phishingsite.com", "malicioussite.net"];
-
-function checkForPhishing() {
-  const currentUrl = window.location.hostname;
-  if (knownPhishingSites.includes(currentUrl)) {
-    alert("Warning: This site is known for phishing. Proceed with caution.");
-  }
-}
-
-checkForPhishing();
+0. All the steps below must be followed whenever the url is changed 
+1. User Navigates to a website
+2. Content.js detects the change in url and sends the new url to background.js and is now waiting for response
+3. background.js now recieves an url and uses feature_extraction to make dataset of extracted features.
+4. then background.js sends this dataset to api making a post request to make prediction.
+5. in api the dataset is send to make prediction and the predicted value is returned
+6. background.js now sends result back to content.js
+7. content.js, based on result may give an alert 

@@ -1,5 +1,3 @@
-// content.js
-
 // Function to check if a URL is suspicious
 function isSuspiciousURL(url) {
     const suspiciousPatterns = [
@@ -56,10 +54,18 @@ function reportPhishing() {
     document.body.appendChild(reportButton);
 }
 
+// Function to check for URL changes
+let currentURL = window.location.href;
+setInterval(() => {
+    if (window.location.href !== currentURL) {
+        currentURL = window.location.href;
+        // Notify background script of the new URL
+        chrome.runtime.sendMessage({ action: "urlChanged", url: currentURL });
+    }
+}, 1000); // Check every second (adjust as needed)
+
 // Main function to execute on page load
 function main() {
-    const currentURL = window.location.href;
-
     // Check the URL for suspicious patterns
     if (isSuspiciousURL(currentURL)) {
         console.warn('Suspicious URL detected:', currentURL);
@@ -68,9 +74,6 @@ function main() {
 
     // Analyze the DOM for phishing indicators
     analyzeDOM();
-
-    // Send the current URL to background.js for prediction
-    chrome.runtime.sendMessage({ action: "sendUrl", url: currentURL });
 
     // Add a reporting button for user feedback
     reportPhishing();
@@ -81,35 +84,18 @@ document.addEventListener('DOMContentLoaded', main);
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message && message.url) {
-        fetch('http://127.0.0.1:5000', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: message.url })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.phishing) {
-                chrome.notifications.create({
-                    type: 'basic',
-                    iconUrl: 'icon.png', // Ensure this path is correct
-                    title: 'Phishing Warning',
-                    message: 'Warning: This site may be a phishing site!',
-                    priority: 2
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
-    } else {
-        console.error('Invalid message received:', message);
+    if (message.action === "predictionResult") {
+        const result = message.result;
+        if (result === "phishing") {
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: 'icon.png', // Ensure this path is correct
+                title: 'Phishing Warning',
+                message: 'Warning: This site may be a phishing site!',
+                priority: 2
+            });
+        } else {
+            console.log("This website is safe.");
+        }
     }
 });
