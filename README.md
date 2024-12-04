@@ -84,13 +84,12 @@ Make sure you have the following installed:
 ### Step 1: Clone the Repository
 1. Open your terminal (Command Prompt, PowerShell, or any terminal of your choice).
 2. Run the following commands on your terminal:
-   [git clone https://github.com/yourusername/phishing-website-detector.git
-   cd phishing-website-detector](https://github.com/Abhilakshya627/Phishing-Website-Detection.git)
+   [git clone https://github.com/Abhilakshya627/Phishing-Website-Detection.git]
 ### Step 2: Step Up the Backend
 - **Install Dependencies**: Use the following command on your terminal : pip install -r requirements.txt
 -**Start API**: Run the following command to start the backend server: python app.py
 ### Step 3: Set Up the Chrome Extension
-1. Open Google Chrome and navigate to: chrome://extensions/
+1. Open Google Chrome and navigate to: [chrome://extensions/]
 2. Enable Developer Mode (toggle in the top-right corner).
 3. Click Load unpacked and select the extension directory in Phishing-Website-Detection folder.
 ### Step 4: Test Everything
