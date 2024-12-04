@@ -100,7 +100,8 @@ Make sure you have the following installed:
 - The extension communicates with the backend API to fetch phishing predictions.
 
 ## Troubleshooting
-### Missing Dependencies: Ensure all packages in requirements.txt are installed.
+### Missing Dependencies:
+- Ensure all packages in requirements.txt are installed.
 ### Backend Issues:
 - Verify the Flask server is running at http://127.0.0.1:5000.
 - Check the terminal logs for any errors.
