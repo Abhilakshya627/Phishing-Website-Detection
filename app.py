@@ -12,7 +12,7 @@ CORS(app)
 
 logging.basicConfig(level=logging.INFO)
 # Load your trained model
-model = joblib.load('Model\model.pkl')
+model = joblib.load('Model/model.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -26,6 +26,8 @@ def predict():
     prediction = model.predict([features])
     print(f"Prediction: {bool(prediction[0])}")
     return jsonify({'phishing': bool(prediction[0])})
+'''
+    return jsonify({'phishing': bool(prediction[0])})'''
 
 '''
 def extract_features(url):

@@ -62,7 +62,7 @@ setInterval(() => {
         // Notify background script of the new URL
         chrome.runtime.sendMessage({ action: "urlChanged", url: currentURL });
     }
-}, 1000); // Check every second (adjust as needed)
+}, 1000); // Check every second for URL changes
 
 // Main function to execute on page load
 function main() {

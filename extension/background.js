@@ -2,7 +2,7 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "sendUrl") {
         // Send the URL to the phishing detection API
-        fetch('https://your-phishing-detection-api.com/analyze', {
+        fetch('https://127.0.0.1:5000/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
