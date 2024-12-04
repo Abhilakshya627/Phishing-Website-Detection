@@ -86,10 +86,11 @@ document.addEventListener('DOMContentLoaded', main);
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "predictionResult") {
         const result = message.result;
+        console.log('Prediction result:', result);
         if (result === "phishing") {
             chrome.notifications.create({
                 type: 'basic',
-                iconUrl: 'icon.png', // Ensure this path is correct
+                iconUrl: 'alert.png', 
                 title: 'Phishing Warning',
                 message: 'Warning: This site may be a phishing site!',
                 priority: 2

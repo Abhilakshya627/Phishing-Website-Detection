@@ -49,7 +49,7 @@ def extract_features(url):
 
 # Load the pre-trained model
 try:
-    with open('Model/model.pkl', 'rb') as model_file:
+    with open('model.pkl', 'rb') as model_file:
         model = pickle.load(model_file)
 except FileNotFoundError:
     print("Model file not found. Ensure 'model.pkl' exists in the 'Model' directory.")

@@ -11,6 +11,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('API Response:', data); // Log the entire response
             // Send the prediction result back to content.js
             chrome.runtime.sendMessage({ action: "predictionResult", result: data.isPhishing ? "phishing" : "safe" });
         })
@@ -32,6 +33,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('API Response:', data); // Log the entire response
             // Send the prediction result back to content.js
             chrome.runtime.sendMessage({ action: "predictionResult", result: data.isPhishing ? "phishing" : "safe" });
         })
@@ -56,11 +58,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.isPhishing) {
+            console.log('API Response:', data); // Log the entire response
+            if (data.phishing) {
                 // Notify the user about the phishing attempt
                 chrome.notifications.create({
                     type: 'basic',
-                    iconUrl: 'icon.png',
+                    iconUrl: 'alert.png',
                     title: 'Phishing Alert!',
                     message: `The site ${tab.url} is suspected of phishing. Proceed with caution!`,
                     priority: 2
